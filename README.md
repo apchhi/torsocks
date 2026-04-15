@@ -1,5 +1,3 @@
-Окей, давай сделаем строго и красиво: все команды — в bash, конфиги — с типом. Ниже финальная версия README.md, уже вылизанная под GitHub.
-
 `markdown
 
 🛡️ Tor Setup on Fedora (with obfs4 Bridges)
