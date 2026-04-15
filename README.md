@@ -36,42 +36,42 @@ Tor с obfs4 позволяет:
 
 Архитектура:
 
-`mermaid
+```mermaid
 flowchart LR
     A[Application] --> B[SOCKS5 9050]
     B --> C[Tor Client]
     C --> D[Tor Network]
     D --> E[Internet]
-`
+```
 
 ---
 
 ⚙️ 1. Установка
 
-`bash
+```bash
 sudo dnf install tor torsocks obfs4proxy
-`
+```
 
 Проверка:
 
-`bash
+```bash
 tor --version
 torsocks --version
-`
+```
 
 ---
 
 🚀 2. Запуск Tor
 
-`bash
+```bash
 sudo systemctl enable --now tor
-`
+```
 
 Проверка статуса:
 
-`bash
+```bash
 systemctl status tor
-`
+```
 
 ---
 
@@ -79,15 +79,15 @@ systemctl status tor
 
 Редактируем конфигурацию:
 
-`bash
+```bash
 sudo nano /etc/tor/torrc
-`
+```
 
 ---
 
 📄 Минимальный torrc
 
-`conf
+```conf
 UseBridges 1
 ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy
 
@@ -98,7 +98,7 @@ Bridge obfs4 <BRIDGE_4>
 Bridge obfs4 <BRIDGE_5>
 
 SocksPort 9050
-`
+```
 
 Важно:
 
@@ -114,30 +114,30 @@ Tor зависит от корректного времени.
 
 Проверка:
 
-`bash
+```bash
 timedatectl status
-`
+```
 
 Ожидаемый результат:
 
-`text
+```text
 System clock synchronized: yes
 NTP service: active
-`
+```
 
 Если нет:
 
-`bash
+```bash
 sudo timedatectl set-ntp true
-`
+```
 
 ---
 
 🔄 5. Перезапуск Tor
 
-`bash
+```bash
 sudo systemctl restart tor
-`
+```
 
 ---
 
@@ -145,18 +145,18 @@ sudo systemctl restart tor
 
 Онлайн‑лог:
 
-`bash
+```bash
 journalctl -u tor -f
-`
+```
 
 Нормальный запуск:
 
-`text
+```text
 Bootstrapped 10%
 Bootstrapped 25%
 Bootstrapped 75%
 Bootstrapped 100% (done)
-`
+```
 
 ---
 
@@ -194,48 +194,48 @@ Bootstrapped 100% (done)
 
 Через torsocks
 
-`bash
+```bash
 torsocks curl https://check.torproject.org
-`
+```
 
 Через SOCKS5 напрямую
 
-`bash
+```bash
 curl --proxy socks5h://127.0.0.1:9050 https://api.ipify.org
-`
+```
 
 ---
 
 🧠 8. Как это работает
 
-`mermaid
+```mermaid
 flowchart LR
     App[Application] --> S[SOCKS5 9050]
     S --> T[Tor Client]
     T --> N[Tor Network]
     N --> I[Internet]
-`
+```
 
 ---
 
 🧩 9. Архитектура (рекомендуемая)
 
-`mermaid
+```mermaid
 flowchart TD
     C[clean profile] -->|direct| Internet
     D[dirty profile] -->|proxy / VPN| Internet
     A[anonymous profile] -->|Tor| TorNetwork
-`
+```
 
 ---
 
 🧹 10. Полезные команды
 
-`bash
+```bash
 journalctl -u tor -f
 systemctl restart tor
 torsocks curl https://google.com
-`
+```
 
 ---
 
@@ -243,41 +243,41 @@ torsocks curl https://google.com
 
 Проверка транспорта obfs4
 
-`bash
+```bash
 sudo -u tor /usr/bin/obfs4proxy -enableLogging -logLevel DEBUG
-`
+```
 
 Проверка доступности bridge по IP/порту
 
-`bash
+```bash
 torsocks telnet <bridgeip> <bridgeport>
-`
+```
 
 или:
 
-`bash
+```bash
 torsocks nc -v <bridgeip> <bridgeport>
-`
+```
 
 Проверка DNS‑утечек
 
-`bash
+```bash
 torsocks dig example.com
-`
+```
 
 Анализ bootstrap‑этапов
 
-`bash
+```bash
 grep -i "Bootstrapped" /var/log/tor/log
-`
+```
 
 (путь к логу может отличаться — см. Log в torrc)
 
 Проверка SELinux (если включён)
 
-`bash
+```bash
 sudo ausearch -m avc -ts recent
-`
+```
 
 ---
 
@@ -287,13 +287,13 @@ sudo ausearch -m avc -ts recent
 
 Создаём юнит:
 
-`bash
+```bash
 sudo nano /etc/systemd/system/tor@anon.service
-`
+```
 
 Содержимое:
 
-`ini
+```ini
 [Unit]
 Description=Tor Anon Instance
 After=network.target
@@ -307,15 +307,15 @@ Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
-`
+```
 
 Пример отдельного конфига:
 
-`bash
+```bash
 sudo nano /etc/tor/torrc-anon
-`
+```
 
-`conf
+```conf
 UseBridges 1
 ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy
 
@@ -327,15 +327,15 @@ Bridge obfs4 <BRIDGE_5>
 
 SocksPort 0.0.0.0:9150
 Log notice file /var/log/tor/tor-anon.log
-`
+```
 
 Активируем профиль:
 
-`bash
+```bash
 sudo systemctl daemon-reload
 sudo systemctl enable --now tor@anon
 systemctl status tor@anon
-`
+```
 
 ---
 
@@ -362,6 +362,4 @@ systemctl status tor@anon
 📜 License
 
 MIT
-`
-
-Если хочешь, можем вынести deep debug в отдельный DEBUG.md и сделать из README.md более лаконичную «фронт‑страницу».
+```
