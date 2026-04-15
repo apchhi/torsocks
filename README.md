@@ -1,5 +1,3 @@
-`markdown
-
 🛡️ Tor Setup on Fedora (with obfs4 Bridges)
 
 Полноценный инженерный гайд по установке, настройке и отладке Tor + obfs4 на Fedora.  
