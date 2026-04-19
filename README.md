@@ -359,7 +359,13 @@ systemctl status tor@anon
 
 ---
 
-📜 License
+п.с. чтобы пустить приложение по порту вручную `podman build --no-cache -t amnezia-proxy .`
 
+```bash
+podman build --no-cache \
+  --build-arg http_proxy=socks5h://127.0.0.1:9050 \
+  --build-arg https_proxy=socks5h://127.0.0.1:9050 \
+  -t amnezia-proxy .
+```
 MIT
 ```
